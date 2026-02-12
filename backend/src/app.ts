@@ -1,24 +1,22 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { pool } from "./db";
+import clientRoutes from "./routes/clientRoutes";
 
 dotenv.config();
 
-const app = express();
+const app = express(); // сначала создаём app
+
 app.use(cors());
 app.use(express.json());
+app.use("/api/clients", clientRoutes);
 
-app.get("/", async (req, res) => {
-  const result = await pool.query("SELECT NOW()");
-  res.json({
-    message: "ТЕСТ",
-    time: result.rows[0],
-  });
+app.get("/", (req, res) => {
+  res.json({ message: "TECT" });
 });
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server started on port ${PORT}`);
 });
