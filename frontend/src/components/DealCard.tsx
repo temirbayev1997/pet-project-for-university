@@ -1,7 +1,7 @@
 import type { Deal } from "../types/deal";
 import { useDraggable } from "@dnd-kit/core";
 
-export function DealCard({ deal }: { deal: Deal }) {
+export function DealCard({ deal, onOpen }: { deal: Deal; onOpen: (deal: Deal) => void }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: deal.id,
   });
@@ -16,6 +16,7 @@ export function DealCard({ deal }: { deal: Deal }) {
     Lead: "bg-blue-100",
     Contacted: "bg-orange-100",
     Proposal: "bg-yellow-100",
+    InProgress: "bg-purple-100",
     Won: "bg-green-100",
     Lost: "bg-red-100"
   }[deal.status] || "bg-gray-100";
@@ -26,11 +27,12 @@ export function DealCard({ deal }: { deal: Deal }) {
       {...listeners}
       {...attributes}
       style={style}
-      className={`p-4 rounded-lg shadow ${statusColor} flex flex-col gap-2 cursor-grab active:cursor-grabbing`}
+      onDoubleClick={() => onOpen(deal)}
+      className={`p-4 rounded-lg shadow ${statusColor} flex flex-col gap-2 cursor-grab active:cursor-grabbing deal-enter deal-hover`}
     >
       <h4 className="font-semibold text-sm">{deal.title}</h4>
       <p className="text-xs text-gray-600">
-        Сумма: {deal.amount?.toLocaleString()} ₽
+        Сумма: {deal.amount?.toLocaleString()} Тг.
       </p>
 
       <div className="flex gap-1">

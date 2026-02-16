@@ -2,7 +2,9 @@ import { pool } from "../db";
 
 export const ClientModel = {
   async getAll() {
-    const result = await pool.query("SELECT * FROM clients ORDER BY id DESC");
+    const result = await pool.query(
+      "SELECT * FROM clients WHERE is_archived = FALSE ORDER BY id DESC"
+    );
     return result.rows;
   },
 
@@ -17,5 +19,13 @@ export const ClientModel = {
     );
 
     return result.rows[0];
+  },
+
+  async archive(id: number) {
+    await pool.query(
+      "UPDATE clients SET is_archived = TRUE WHERE id = $1",
+      [id]
+    );
   }
 };
+

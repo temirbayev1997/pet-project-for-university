@@ -2,33 +2,26 @@ import { useEffect, useState } from "react";
 import { fetchDeals, updateDealStatus } from "../services/api";
 import type { Deal } from "../types/deal";
 import { DealColumn } from "../components/DealColumn";
-import { createDeal } from "../services/api";
 import {
   DndContext,
   closestCorners,
   type DragEndEvent,
 } from "@dnd-kit/core";
+import { DealModal } from "../components/DealModal";
+import { DealDetailsModal } from "../components/DealDetailsModal";
 
-const statuses: Deal["status"][] = ["Lead", "Contacted", "Proposal", "Won", "Lost"];
+const statuses: Deal["status"][] = ["Lead", "Contacted", "Proposal", "InProgress", "Won", "Lost"];
 
 export function DealsPage() {
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [showDealModal, setShowDealModal] = useState(false);
+  const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
 
   const loadDeals = async () => {
     const data = await fetchDeals();
     setDeals(data);
   };
 
-const handleCreateDeal = async () => {
-  await createDeal({
-    title: "Тестовая сделка",
-    amount: 5000,
-    status: "Lead",
-    clientId: 1
-  });
-
-  await loadDeals();
-};
 
 const handleDragEnd = async (event: DragEndEvent) => {
   const { active, over } = event;
@@ -55,7 +48,7 @@ return (
 
     <button
       className="bg-green-500 text-white px-3 py-1 rounded mb-4"
-      onClick={handleCreateDeal}
+      onClick={() => setShowDealModal(true)}
     >
       Добавить сделку
     </button>
@@ -68,10 +61,25 @@ return (
             id={status}
             title={status}
             deals={deals.filter((d) => d.status === status)}
+            onOpen={setSelectedDeal}
           />
         ))}
       </div>
     </DndContext>
+
+    {showDealModal && (
+      <DealModal
+        onClose={() => setShowDealModal(false)}
+        onCreated={loadDeals}
+      />
+    )}
+    {selectedDeal && (
+      <DealDetailsModal
+        deal={selectedDeal}
+        onClose={() => setSelectedDeal(null)}
+        onUpdated={loadDeals}
+      />
+    )}
   </div>
 );
 

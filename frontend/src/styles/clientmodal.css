@@ -1,0 +1,70 @@
+/* ===== Overlay (фон) ===== */
+.client-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+
+  animation: overlayFade 0.2s ease forwards;
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== Modal окно ===== */
+.client-modal-content {
+  background: white;
+  width: 420px;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+  animation: modalPop 0.25s ease forwards;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Кнопки ===== */
+.client-modal-button {
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.client-modal-button:hover {
+  transform: translateY(-1px);
+}
+
+.client-modal-button:active {
+  transform: scale(0.96);
+}
+
+/* ===== Инпуты ===== */
+.client-modal-input {
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: 8px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.client-modal-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}

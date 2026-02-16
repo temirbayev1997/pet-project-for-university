@@ -35,3 +35,9 @@ export async function createDeal(data: any) {
   });
   return res.json();
 }
+export async function archiveClient(id: number) {
+  const res = await fetch(`${API_URL}/clients/${id}/archive`, {
+    method: "PATCH",
+  });
+  return res.json();
+}

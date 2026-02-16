@@ -19,12 +19,20 @@ export const createDeal = async (req: Request, res: Response) => {
     title,
     amount,
     status,
-    clientId: clientId || null,
+    clientId,
     closeDate,
+    createdBy: "admin@microcrm.local", // временно
+    assignedTo: "manager_1",           // временно
   });
   res.status(201).json(deal);
 };
+export const updateDeal = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
 
+  const updated = await DealModel.updateFull(id, req.body);
+
+  res.json(updated);
+};
 export const updateDealStatus = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { status } = req.body as { status: DealStatus };
