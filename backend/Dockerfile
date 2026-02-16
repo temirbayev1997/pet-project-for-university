@@ -5,8 +5,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY . .
-
-EXPOSE 5000
-
+# Dev режим, ts-node-dev будет следить за изменениями
 CMD ["npm", "run", "dev"]
