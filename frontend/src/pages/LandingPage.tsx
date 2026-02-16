@@ -29,7 +29,7 @@ export function LandingPage() {
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
             <span className="text-white font-bold text-lg">M</span>
           </div>
-          <h1 className="text-5xl font-bold">Micro CRM</h1>
+          <h1 className="text-5xl font-bold">Мини CRM</h1>
         </div>
         <p className="text-xl text-white/90 leading-relaxed">
           Помогает бизнесу работать
@@ -40,7 +40,7 @@ export function LandingPage() {
       <div className="relative z-10 w-full max-w-md mx-4 lg:mr-20 lg:ml-auto bg-white rounded-3xl shadow-2xl p-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-            Создайте Micro CRM
+            Создайте Мини CRM
           </h2>
           <p className="text-sm text-gray-500">Ваш e-mail</p>
         </div>

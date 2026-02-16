@@ -61,7 +61,7 @@ export function LoginPage() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
             <span className="text-white font-bold text-lg">M</span>
           </div>
-          <h1 className="text-5xl font-bold">Micro CRM</h1>
+          <h1 className="text-5xl font-bold">Мини CRM</h1>
         </div>
         <p className="text-xl text-white/90 leading-relaxed">
           Помогает бизнесу работать
@@ -72,7 +72,7 @@ export function LoginPage() {
       <div className="relative z-10 w-full max-w-md mx-4 lg:mr-20 lg:ml-auto bg-white rounded-3xl shadow-2xl p-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-            Войти в Micro CRM
+            Войти в Мини CRM
           </h2>
           <p className="text-sm text-gray-500">E-mail или телефон</p>
         </div>

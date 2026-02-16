@@ -29,7 +29,7 @@ export function MainLayout() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold tracking-tight">
-                    Micro CRM
+                    Мини CRM
                   </span>
                   <span className="text-xs text-slate-500">
                     для микробизнеса
