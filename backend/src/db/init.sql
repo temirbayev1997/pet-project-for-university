@@ -37,3 +37,27 @@ CREATE TABLE IF NOT EXISTS deals (
 INSERT INTO users (username, email, password, role)
 VALUES ('admin', 'admin@microcrm.local', '$2b$10$jy.n.Vb79uVefxFbbxPnu.cE9ib3a5VrjG5McPIRHRAJ9NJxue1pW', 'admin')
 ON CONFLICT (email) DO NOTHING;
+
+-- Структура таблицы reminders для напоминаний, связанных с клиентами и сделками
+CREATE TABLE reminders (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  remind_at TIMESTAMP NOT NULL,
+  is_done BOOLEAN DEFAULT false,
+
+  client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
+  deal_id INTEGER REFERENCES deals(id) ON DELETE CASCADE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE clients
+ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT false;
+
+-- Deals
+ALTER TABLE deals
+ADD COLUMN IF NOT EXISTS created_by INTEGER;
+
+ALTER TABLE deals
+ADD COLUMN IF NOT EXISTS assigned_to INTEGER;

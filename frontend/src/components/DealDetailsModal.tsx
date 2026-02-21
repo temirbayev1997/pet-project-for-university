@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Deal } from "../types/deal";
+import { createReminder } from "../services/api";
 
 export function DealDetailsModal({
   deal,
@@ -101,6 +102,17 @@ export function DealDetailsModal({
           >
             Сохранить
           </button>
+          <button
+              onClick={() =>
+                createReminder({
+                  title: "Работа по сделке",
+                  remindAt: new Date().toISOString(),
+                  dealId: deal.id,
+                })
+              }
+            >
+              ➕ Напоминание
+            </button>
         </div>
       </div>
     </div>

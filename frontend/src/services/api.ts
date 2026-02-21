@@ -41,3 +41,39 @@ export async function archiveClient(id: number) {
   });
   return res.json();
 }
+
+export async function fetchReminders() {
+  const res = await fetch(`${API_URL}/reminders`);
+  return res.json();
+}
+
+export async function createReminder(data: {
+  title: string;
+  description?: string;
+  remindAt: string;
+  clientId?: number | null;
+  dealId?: number | null;
+}) {
+  const res = await fetch(`${API_URL}/reminders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function updateReminderStatus(id: number, isDone: boolean) {
+  const res = await fetch(`${API_URL}/reminders/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ isDone }),
+  });
+  return res.json();
+}
+
+export async function deleteReminder(id: number) {
+  const res = await fetch(`${API_URL}/reminders/${id}`, {
+    method: "DELETE",
+  });
+  return res.json();
+}

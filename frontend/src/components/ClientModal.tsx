@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "../services/api";
 import "../styles/clientmodal.css";
+import { createReminder } from "../services/api";
 
 export function ClientModal({
   onClose,
@@ -26,26 +27,34 @@ export function ClientModal({
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
-    if (!form.name.trim()) {
-      setError("Имя обязательно");
-      return;
-    }
+const handleSubmit = async () => {
+  if (!form.name.trim()) {
+    setError("Имя обязательно");
+    return;
+  }
 
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      await createClient(form);
+    // 1️⃣ создаём клиента
+    const newClient = await createClient(form);
 
-      onCreated();
-      onClose();
-    } catch {
-      setError("Ошибка при создании клиента");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // 2️⃣ создаём напоминание для него
+    await createReminder({
+      title: "Связаться с клиентом",
+      remindAt: new Date().toISOString(),
+      clientId: newClient.id,
+    });
+
+    onCreated();
+    onClose();
+  } catch {
+    setError("Ошибка при создании клиента");
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Закрытие по ESC
   useEffect(() => {

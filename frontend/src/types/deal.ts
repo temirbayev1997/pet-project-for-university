@@ -6,6 +6,6 @@ export interface Deal {
   clientId: number;
   closeDate?: string;
   tags?: string[];
-  assignedTo?: string;
-  createdBy: string;
+  assignedTo?: number;
+  createdBy: number;
 }

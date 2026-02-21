@@ -7,6 +7,12 @@ import { ClientModal } from "../components/ClientModal";
 export function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
+
+  const handleEdit = (client: Client) => {
+    setEditingClient(client);
+    setShowModal(true);
+  };
 
   const load = async () => {
     const data = await fetchClients();
@@ -25,7 +31,7 @@ export function ClientsPage() {
         Новый клиент
       </button>
       <div className="grid gap-3 overflow-auto" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))" }}>
-        {clients.map((c) => <ClientCard key={c.id} client={c} />)}
+        {clients.map((c) => <ClientCard key={c.id} client={c} onEdit={handleEdit} />)}
       </div>
       {showModal && (
         <ClientModal

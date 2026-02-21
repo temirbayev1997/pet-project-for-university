@@ -21,8 +21,8 @@ export const createDeal = async (req: Request, res: Response) => {
     status,
     clientId,
     closeDate,
-    createdBy: "admin@microcrm.local", // временно
-    assignedTo: "manager_1",           // временно
+    createdBy: 1,
+    assignedTo: 1,
   });
   res.status(201).json(deal);
 };
