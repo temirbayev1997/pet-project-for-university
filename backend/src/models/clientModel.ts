@@ -21,6 +21,27 @@ export const ClientModel = {
     return result.rows[0];
   },
 
+  async update(id: number, data: any) {
+    const { name, phone, email, company, notes } = data;
+
+    const result = await pool.query(
+      `
+      UPDATE clients
+      SET
+        name = $2,
+        phone = $3,
+        email = $4,
+        company = $5,
+        notes = $6
+      WHERE id = $1
+      RETURNING *
+      `,
+      [id, name, phone, email, company, notes]
+    );
+
+    return result.rows[0];
+  },
+
   async archive(id: number) {
     await pool.query(
       "UPDATE clients SET is_archived = TRUE WHERE id = $1",

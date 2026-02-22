@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { createClient } from "../services/api";
+import { createClient, updateClient } from "../services/api";
 import "../styles/clientmodal.css";
 import { createReminder } from "../services/api";
+import type { Client } from "../types/client";
 
 export function ClientModal({
-  onClose,
-  onCreated,
-}: {
-  onClose: () => void;
-  onCreated: () => void;
-}) {
+    client,
+    onClose,
+    onCreated,
+  }: {
+    client?: Client | null;
+    onClose: () => void;
+    onCreated: () => void;
+  }) {
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -26,6 +29,18 @@ export function ClientModal({
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    if (client) {
+      setForm({
+        name: client.name || "",
+        phone: client.phone || "",
+        email: client.email || "",
+        company: client.company || "",
+        comment: client.notes || "",
+      });
+    }
+  }, [client]);
+const isEdit = !!client;
 
 const handleSubmit = async () => {
   if (!form.name.trim()) {
@@ -37,20 +52,22 @@ const handleSubmit = async () => {
     setLoading(true);
     setError("");
 
-    // 1️⃣ создаём клиента
-    const newClient = await createClient(form);
+    if (isEdit && client) {
+      await updateClient(client.id, form);
+    } else {
+      const newClient = await createClient(form);
 
-    // 2️⃣ создаём напоминание для него
-    await createReminder({
-      title: "Связаться с клиентом",
-      remindAt: new Date().toISOString(),
-      clientId: newClient.id,
-    });
+      await createReminder({
+        title: "Связаться с клиентом",
+        remindAt: new Date().toISOString(),
+        clientId: newClient.id,
+      });
+    }
 
     onCreated();
     onClose();
   } catch {
-    setError("Ошибка при создании клиента");
+    setError("Ошибка при сохранении клиента");
   } finally {
     setLoading(false);
   }
@@ -74,35 +91,42 @@ const handleSubmit = async () => {
         className="client-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-bold mb-4">Создание клиента</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {isEdit ? "Редактирование клиента" : "Создание клиента"}
+        </h2>
 
         <div className="flex flex-col gap-3">
           <input
             name="name"
+            value={form.name}
             placeholder="Имя *"
             onChange={handleChange}
             className="client-modal-input"
           />
           <input
             name="phone"
+            value={form.phone}
             placeholder="Телефон"
             onChange={handleChange}
             className="client-modal-input"
           />
           <input
             name="email"
+            value={form.email}
             placeholder="Email"
             onChange={handleChange}
             className="client-modal-input"
           />
           <input
             name="company"
+            value={form.company}
             placeholder="Компания"
             onChange={handleChange}
             className="client-modal-input"
           />
           <textarea
             name="comment"
+            value={form.comment}
             placeholder="Комментарий"
             onChange={handleChange}
             className="client-modal-input"
@@ -126,7 +150,12 @@ const handleSubmit = async () => {
             disabled={loading}
             className="client-modal-button px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
           >
-            {loading ? "Сохранение..." : "Сохранить"}
+            {loading
+              ? "Сохранение..."
+              : isEdit
+              ? "Обновить"
+              : "Сохранить"
+            }
           </button>
         </div>
       </div>

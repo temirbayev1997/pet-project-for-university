@@ -9,9 +9,8 @@ import type { Reminder } from "../types/reminder";
 
 export function RemindersPage() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [filter, setFilter] = useState<"all" | "today" | "overdue">("all");
   const [showModal, setShowModal] = useState(false);
-  const [scope, setScope] = useState<"all" | "client" | "deal" | "general">("all");
+  const [scope, setScope] = useState<"all" | "client" | "deal" | "general" | "overdue" | "today">("all");
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -51,7 +50,7 @@ export function RemindersPage() {
   const filtered = reminders.filter((r) => {
     const date = new Date(r.remindAt);
 
-    if (filter === "today") {
+    if (scope === "today") {
       return (
         date.getDate() === now.getDate() &&
         date.getMonth() === now.getMonth() &&
@@ -59,7 +58,7 @@ export function RemindersPage() {
       );
     }
 
-    if (filter === "overdue") {
+    if (scope === "overdue") {
       return date < now && !r.isDone;
     }
 

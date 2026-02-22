@@ -10,8 +10,14 @@ import {
 import { DealModal } from "../components/DealModal";
 import { DealDetailsModal } from "../components/DealDetailsModal";
 
-const statuses: Deal["status"][] = ["Lead", "Contacted", "Proposal", "InProgress", "Won", "Lost"];
-
+const statuses = [
+  { value: "Lead", label: "Сделки" },
+  { value: "Contacted", label: "Связались" },
+  { value: "Proposal", label: "Предложение" },
+  { value: "InProgress", label: "В работе" },
+  { value: "Won", label: "Состоялась" },
+  { value: "Lost", label: "Не состоялась" },
+] as const;
 export function DealsPage() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [showDealModal, setShowDealModal] = useState(false);
@@ -55,12 +61,12 @@ return (
 
     <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
       <div className="flex gap-6 overflow-x-auto bg-gray-100 min-h-screen p-6">
-        {statuses.map((status) => (
+        {statuses.map(({ value, label }) => (
           <DealColumn
-            key={status}
-            id={status}
-            title={status}
-            deals={deals.filter((d) => d.status === status)}
+            key={value}
+            id={value}
+            title={label}
+            deals={deals.filter((d) => d.status === value)}
             onOpen={setSelectedDeal}
           />
         ))}

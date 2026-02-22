@@ -33,12 +33,16 @@ export function ClientsPage() {
       <div className="grid gap-3 overflow-auto" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))" }}>
         {clients.map((c) => <ClientCard key={c.id} client={c} onEdit={handleEdit} />)}
       </div>
-      {showModal && (
-        <ClientModal
-          onClose={() => setShowModal(false)}
-          onCreated={load}
-        />
-      )}
+{showModal && (
+  <ClientModal
+    client={editingClient}
+    onClose={() => {
+      setShowModal(false);
+      setEditingClient(null);
+    }}
+    onCreated={load}
+  />
+)}
     </div>
   );
 }

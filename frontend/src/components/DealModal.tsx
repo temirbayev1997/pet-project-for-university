@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createDeal, fetchClients } from "../services/api";
+import { createDeal, fetchClients, createReminder } from "../services/api";
 
 export function DealModal({
   onClose,
@@ -33,12 +33,20 @@ export function DealModal({
       return;
     }
 
-    await createDeal({
+    // 1️⃣ создаём сделку
+    const newDeal = await createDeal({
       title: form.title,
       amount: Number(form.amount),
       status: form.status,
       clientId: Number(form.clientId),
       closeDate: form.closeDate || null,
+    });
+
+    // 2️⃣ создаём напоминание для сделки
+    await createReminder({
+      title: `Работа по сделке: ${newDeal.title}`,
+      remindAt: new Date().toISOString(),
+      dealId: newDeal.id,
     });
 
     onCreated();
@@ -88,12 +96,12 @@ export function DealModal({
             onChange={handleChange}
             defaultValue="Lead"
           >
-            <option value="Lead">Lead</option>
-            <option value="InProgress">InProgress</option>
-            <option value="Contacted">Contacted</option>
-            <option value="Proposal">Proposal</option>
-            <option value="Won">Won</option>
-            <option value="Lost">Lost</option>
+            <option value="Lead">Лид</option>
+            <option value="Contacted">Связались</option>
+            <option value="Proposal">Предложение</option>
+            <option value="InProgress">В работе</option>
+            <option value="Won">Выиграна</option>
+            <option value="Lost">Проиграна</option>
           </select>
 
           <input

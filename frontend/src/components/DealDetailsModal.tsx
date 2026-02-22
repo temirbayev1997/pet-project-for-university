@@ -74,12 +74,12 @@ export function DealDetailsModal({
               }
               className="client-modal-input mt-1 ml-[41px]"
             >
-              <option value="Lead">Lead</option>
-              <option value="InProgress">InProgress</option>
-              <option value="Contacted">Contacted</option>
-              <option value="Proposal">Proposal</option>
-              <option value="Won">Won</option>
-              <option value="Lost">Lost</option>
+              <option value="Lead">Лид</option>
+              <option value="Contacted">Связались</option>
+              <option value="Proposal">Предложение</option>
+              <option value="InProgress">В работе</option>
+              <option value="Won">Выиграна</option>
+              <option value="Lost">Проиграна</option>
             </select>
           </div>
 
@@ -103,6 +103,7 @@ export function DealDetailsModal({
             Сохранить
           </button>
           <button
+              className="client-modal-button bg-green-600 text-white px-4 py-2 rounded"
               onClick={() =>
                 createReminder({
                   title: "Работа по сделке",
@@ -111,7 +112,7 @@ export function DealDetailsModal({
                 })
               }
             >
-              ➕ Напоминание
+              Напоминание
             </button>
         </div>
       </div>

@@ -21,3 +21,14 @@ export const archiveClient = async (req: Request, res: Response) => {
 
   res.json({ message: "Клиент архивирован" });
 };
+export const updateClient = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+
+  const updated = await ClientModel.update(id, req.body);
+
+  if (!updated) {
+    return res.status(404).json({ message: "Клиент не найден" });
+  }
+
+  res.json(updated);
+};
