@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createDeal, fetchClients, createReminder } from "../services/api";
+import toast from "react-hot-toast";
 
 export function DealModal({
   onClose,
@@ -29,7 +30,7 @@ export function DealModal({
 
   const handleSubmit = async () => {
     if (!form.title || !form.clientId) {
-      alert("Название и клиент обязательны");
+      toast.error("Название и клиент обязательны");
       return;
     }
 

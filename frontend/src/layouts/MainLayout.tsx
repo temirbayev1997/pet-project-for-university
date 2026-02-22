@@ -1,15 +1,25 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical } from "lucide-react";
+import { useState, useEffect } from "react";
 
-export function MainLayout() {
+export function MainLayout( { isMobile }: { isMobile: boolean }) {
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // если есть авторизация
-    navigate("/login"); // редирект
-  };
+  const [isMobileState, setIsMobileState] = useState(isMobile);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobileState(window.innerWidth < 768);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const handleLogout = () => {
+      localStorage.removeItem("token"); // если есть авторизация
+      navigate("/login"); // редирект
+    };
 
   return (
     <div className="min-h-screen flex bg-slate-100 text-slate-900">
@@ -102,6 +112,21 @@ export function MainLayout() {
               <Bell size={18} />
               {isOpen && <span>Напоминания</span>}
             </NavLink>
+
+            <NavLink 
+              to="/dashboard" 
+              className={({ isActive }) =>
+                `flex items-center ${
+                  isOpen ? "justify-start gap-3 px-3" : "justify-center px-0"
+                } py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-600 font-medium"
+                    : "text-slate-600 hover:bg-slate-50"
+                }`
+              }>
+                <AlignStartVertical size={18} />
+                {isOpen && <span>Дашборд</span>}
+              </NavLink>
           </nav>
         </div>
 
@@ -129,6 +154,13 @@ export function MainLayout() {
       <main className="flex-1 p-6 transition-all duration-300">
         <Outlet />
       </main>
+      {isMobileState && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 shadow-lg">
+          <NavLink to="/dashboard">📊</NavLink>
+          <NavLink to="/clients">👥</NavLink>
+          <NavLink to="/reminders">⏰</NavLink>
+        </div>
+      )}
     </div>
   );
 }

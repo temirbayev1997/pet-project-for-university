@@ -86,3 +86,7 @@ export async function updateClient(id: number, data: any) {
 
   return res.json();
 }
+export async function fetchStats() { 
+  const res = await fetch(`${API_URL}/stats`);
+  return res.json();
+}

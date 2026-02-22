@@ -6,6 +6,7 @@ import dealRoutes from "./routes/dealRoutes";
 import authRoutes from "./routes/authRoutes";
 import { initDatabase } from "./db/initDb";
 import reminderRoutes from "./routes/reminderRoutes";
+import statsRoutes from "./routes/statsRoutes";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/deals", dealRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/reminders", reminderRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "TECT" });
