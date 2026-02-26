@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical } from "lucide-react";
 import { useState, useEffect } from "react";
+import { SidebarContext } from "../context/SidebarContext";
 
 export function MainLayout( { isMobile }: { isMobile: boolean }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -22,6 +23,7 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
     };
 
   return (
+  <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
     <div className="min-h-screen flex bg-slate-100 text-slate-900">
       
       {/* Sidebar */}
@@ -152,7 +154,7 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
 
       {/* Main content */}
       <main className="flex-1 p-6 transition-all duration-300">
-        <Outlet />
+        <Outlet context={{ isSidebarOpen: isOpen }} />
       </main>
       {isMobileState && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 shadow-lg">
@@ -162,5 +164,6 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
         </div>
       )}
     </div>
+  </SidebarContext.Provider>
   );
 }

@@ -1,12 +1,13 @@
 import { DealCard } from "./DealCard";
 import type { Deal } from "../types/deal";
 import { useDroppable } from "@dnd-kit/core";
+import { useSidebar } from "../context/SidebarContext";
 
 export function DealColumn({
   id,
   title,
   deals,
-  onOpen
+  onOpen,
 }: {
   id: string;
   title: string;
@@ -16,11 +17,21 @@ export function DealColumn({
   const { setNodeRef } = useDroppable({
     id,
   });
-
+  const { isOpen } = useSidebar();
   return (
     <div
       ref={setNodeRef}
-      className="min-w-[220px] max-w-[260px] flex-1 bg-gray-50 rounded-lg p-3 flex flex-col gap-3"
+      className={`
+              flex-shrink-0
+              ${isOpen ? "w-[190px]" : "w-[200px]"}
+              bg-gray-50
+              rounded-xl
+              p-3
+              flex
+              flex-col
+              gap-3
+              transition-all duration-300
+            `}
     >
       <h3 className="font-bold text-gray-700 mb-2">{title}</h3>
 
