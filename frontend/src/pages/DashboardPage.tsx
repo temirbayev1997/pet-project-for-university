@@ -31,8 +31,8 @@ export function DashboardPage() {
       <div className="grid grid-cols-4 gap-6 mb-8">
         <StatCard title="Клиенты" value={stats.clients} />
         <StatCard title="Активные сделки" value={stats.activeDeals} />
-        <StatCard title="Выигранные" value={stats.wonDeals} />
-        <StatCard title="Просроченные" value={stats.overdueReminders} />
+        <StatCard title="Состоялась" value={stats.wonDeals} />
+        <StatCard title="Не состоялась" value={stats.overdueReminders} />
       </div>
 
       <div className="grid grid-cols-2 gap-6">

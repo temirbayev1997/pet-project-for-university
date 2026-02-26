@@ -4,12 +4,14 @@ import {
   createReminder,
   updateReminderStatus,
   deleteReminder,
+  updateReminder,
 } from "../services/api";
 import type { Reminder } from "../types/reminder";
 
 export function RemindersPage() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingReminder, setEditingReminder] = useState<Reminder | null>(null);
   const [scope, setScope] = useState<"all" | "client" | "deal" | "general" | "overdue" | "today">("all");
   const [form, setForm] = useState({
     title: "",
@@ -26,11 +28,17 @@ export function RemindersPage() {
     load();
   }, []);
 
-  const handleCreate = async () => {
+  const handleSubmit = async () => {
     if (!form.title || !form.remindAt) return;
 
-    await createReminder(form);
+    if (editingReminder) {
+      await updateReminder(editingReminder.id, form);
+    } else {
+      await createReminder(form);
+    }
+
     setForm({ title: "", description: "", remindAt: "" });
+    setEditingReminder(null);
     setShowModal(false);
     load();
   };
@@ -130,6 +138,20 @@ export function RemindersPage() {
               >
                 🗑
               </button>
+              <button
+                onClick={() => {
+                  setEditingReminder(r);
+                  setForm({
+                    title: r.title,
+                    description: r.description || "",
+                    remindAt: r.remindAt.slice(0, 16),
+                  });
+                  setShowModal(true);
+                }}
+                className="px-3 py-1 bg-yellow-500 text-white rounded"
+              >
+                ✏
+              </button>
             </div>
           </div>
         );
@@ -179,10 +201,10 @@ export function RemindersPage() {
                 Отмена
               </button>
               <button
-                onClick={handleCreate}
+                onClick={handleSubmit}
                 className="px-4 py-2 bg-blue-600 text-white rounded"
               >
-                Создать
+                {editingReminder ? "Обновить" : "Создать"}
               </button>
             </div>
           </div>

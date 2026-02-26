@@ -12,7 +12,7 @@ export interface ReminderRow {
 }
 
 export const ReminderModel = {
-  async getAll(): Promise<ReminderRow[]> {
+  async getAll(userId: number): Promise<ReminderRow[]> {
     const result = await pool.query(`
       SELECT
         id,
@@ -24,6 +24,7 @@ export const ReminderModel = {
         deal_id AS "dealId",
         created_at AS "createdAt"
       FROM reminders
+      WHERE user_id = $1
       ORDER BY remind_at ASC
     `);
 
@@ -70,4 +71,39 @@ export const ReminderModel = {
   async delete(id: number) {
     await pool.query(`DELETE FROM reminders WHERE id = $1`, [id]);
   },
+  async update(id: number, data: any): Promise<ReminderRow> {
+  const { title, description, remindAt, clientId, dealId } = data;
+
+  const result = await pool.query(
+    `
+    UPDATE reminders
+    SET
+      title = $2,
+      description = $3,
+      remind_at = $4,
+      client_id = $5,
+      deal_id = $6
+    WHERE id = $1
+    RETURNING
+      id,
+      title,
+      description,
+      remind_at AS "remindAt",
+      is_done AS "isDone",
+      client_id AS "clientId",
+      deal_id AS "dealId",
+      created_at AS "createdAt"
+    `,
+    [
+      id,
+      title,
+      description ?? null,
+      remindAt,
+      clientId ?? null,
+      dealId ?? null,
+    ]
+  );
+
+  return result.rows[0];
+}
 };

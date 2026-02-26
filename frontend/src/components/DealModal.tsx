@@ -97,12 +97,12 @@ export function DealModal({
             onChange={handleChange}
             defaultValue="Lead"
           >
-            <option value="Lead">Лид</option>
+            <option value="Lead">Сделки</option>
             <option value="Contacted">Связались</option>
             <option value="Proposal">Предложение</option>
             <option value="InProgress">В работе</option>
-            <option value="Won">Выиграна</option>
-            <option value="Lost">Проиграна</option>
+            <option value="Won">Состоялась</option>
+            <option value="Lost">Не состоялась</option>
           </select>
 
           <input

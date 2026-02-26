@@ -45,4 +45,15 @@ export const ReminderController = {
       res.status(500).json({ message: "Failed to delete reminder" });
     }
   },
+  async update(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+    const updated = await ReminderModel.update(id, req.body);
+
+    res.json(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update reminder" });
+  }
+},
 };
