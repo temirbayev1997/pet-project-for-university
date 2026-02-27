@@ -1,102 +1,91 @@
-const API_URL = "http://localhost:5000/api";
+import { authFetch } from "./authFetch";
 
 export async function fetchClients() {
-  const res = await fetch(`${API_URL}/clients`);
-  return res.json();
+  const res = await authFetch("/clients");
+  return res?.json();
 }
 
 export async function createClient(data: any) {
-  const res = await fetch(`${API_URL}/clients`, {
+  const res = await authFetch("/clients", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  return res.json();
+  return res?.json();
 }
 
 export async function fetchDeals() {
-  const res = await fetch(`${API_URL}/deals`);
-  return res.json();
+  const res = await authFetch("/deals");
+  return res?.json();
 }
 
 export async function updateDealStatus(id: number, status: string) {
-  const res = await fetch(`${API_URL}/deals/${id}/status`, {
+  const res = await authFetch(`/deals/${id}/status`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
   });
-  return res.json();
+  return res?.json();
 }
+
 export async function createDeal(data: any) {
-  const res = await fetch(`${API_URL}/deals`, {
+  const res = await authFetch("/deals", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  return res.json();
+  return res?.json();
 }
+
 export async function archiveClient(id: number) {
-  const res = await fetch(`${API_URL}/clients/${id}/archive`, {
+  const res = await authFetch(`/clients/${id}/archive`, {
     method: "PATCH",
   });
-  return res.json();
+  return res?.json();
 }
 
 export async function fetchReminders() {
-  const res = await fetch(`${API_URL}/reminders`);
-  return res.json();
+  const res = await authFetch("/reminders");
+  return res?.json();
 }
 
-export async function createReminder(data: {
-  title: string;
-  description?: string;
-  remindAt: string;
-  clientId?: number | null;
-  dealId?: number | null;
-}) {
-  const res = await fetch(`${API_URL}/reminders`, {
+export async function createReminder(data: any) {
+  const res = await authFetch("/reminders", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  return res.json();
+  return res?.json();
 }
 
 export async function updateReminderStatus(id: number, isDone: boolean) {
-  const res = await fetch(`${API_URL}/reminders/${id}`, {
+  const res = await authFetch(`/reminders/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ isDone }),
   });
-  return res.json();
+  return res?.json();
 }
 
 export async function deleteReminder(id: number) {
-  const res = await fetch(`${API_URL}/reminders/${id}`, {
+  const res = await authFetch(`/reminders/${id}`, {
     method: "DELETE",
   });
-  return res.json();
+  return res?.json();
 }
-export const updateReminder = async (id: number, data: any) => {
-  const res = await fetch(`${API_URL}/reminders/${id}`, {
+
+export async function updateReminder(id: number, data: any) {
+  const res = await authFetch(`/reminders/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  return res.json();
-};
+  return res?.json();
+}
 
 export async function updateClient(id: number, data: any) {
-  const res = await fetch(`${API_URL}/clients/${id}`, {
+  const res = await authFetch(`/clients/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  return res.json();
+  return res?.json();
 }
-export async function fetchStats() { 
-  const res = await fetch(`${API_URL}/stats`);
-  return res.json();
+
+export async function fetchStats() {
+  const res = await authFetch("/stats");
+  return res?.json();
 }

@@ -2,16 +2,16 @@ import { Router } from "express";
 import {
   getDeals,
   createDeal,
-  updateDealStatus, updateDeal
+  updateDeal,
+  updateDealStatus
 } from "../controllers/dealController";
-import { auth } from "../middleware/auth";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", auth, getDeals);
-router.post("/", auth, createDeal);
-router.patch("/:id/status", auth, updateDealStatus);
-router.put("/:id", auth, updateDeal);
+router.get("/", authMiddleware, getDeals);
+router.post("/", authMiddleware, createDeal);
+router.put("/:id", authMiddleware, updateDeal);
+router.patch("/:id/status", authMiddleware, updateDealStatus);
 
 export default router;
-

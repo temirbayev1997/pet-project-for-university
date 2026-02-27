@@ -1,28 +1,35 @@
-import { Request, Response } from "express";
+import { Response, Request } from "express";
+import { AuthRequest } from "../middleware/authMiddleware";
 import { ReminderModel } from "../models/reminderModel";
 
 export const ReminderController = {
-  async getAll(req: Request, res: Response) {
-    try {
-      const reminders = await ReminderModel.getAll();
-      res.json(reminders);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Failed to fetch reminders" });
-    }
-  },
+async getAll(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.user?.id;
 
-  async create(req: Request, res: Response) {
-    try {
-      const reminder = await ReminderModel.create(req.body);
-      res.status(201).json(reminder);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Failed to create reminder" });
-    }
-  },
+    const reminders = await ReminderModel.getAll(userId);
+    res.json(reminders);
 
-  async updateStatus(req: Request, res: Response) {
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch reminders" });
+  }
+},
+
+async create(req: AuthRequest, res: Response) {
+  try {
+    const userId = req.user?.id;
+
+    const reminder = await ReminderModel.create(req.body, userId);
+    res.status(201).json(reminder);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to create reminder" });
+  }
+},
+
+  async updateStatus(req: AuthRequest, res: Response){
     try {
       const id = Number(req.params.id);
       const { isDone } = req.body;

@@ -12,54 +12,58 @@ export interface ReminderRow {
 }
 
 export const ReminderModel = {
-  async getAll(userId: number): Promise<ReminderRow[]> {
-    const result = await pool.query(`
-      SELECT
-        id,
-        title,
-        description,
-        remind_at AS "remindAt",
-        is_done AS "isDone",
-        client_id AS "clientId",
-        deal_id AS "dealId",
-        created_at AS "createdAt"
-      FROM reminders
-      WHERE user_id = $1
-      ORDER BY remind_at ASC
-    `);
+async getAll(userId: number): Promise<ReminderRow[]> {
+  const result = await pool.query(
+    `
+    SELECT
+      id,
+      title,
+      description,
+      remind_at AS "remindAt",
+      is_done AS "isDone",
+      client_id AS "clientId",
+      deal_id AS "dealId",
+      created_at AS "createdAt"
+    FROM reminders
+    WHERE user_id = $1
+    ORDER BY remind_at ASC
+    `,
+    [userId] // ← ВОТ ЭТОГО НЕ ХВАТАЛО
+  );
 
-    return result.rows;
-  },
+  return result.rows;
+}, 
 
-  async create(data: any): Promise<ReminderRow> {
-    const { title, description, remindAt, clientId, dealId } = data;
+async create(data: any, userId: number): Promise<ReminderRow> {
+  const { title, description, remindAt, clientId, dealId } = data;
 
-    const result = await pool.query(
-      `
-      INSERT INTO reminders
-      (title, description, remind_at, client_id, deal_id)
-      VALUES ($1,$2,$3,$4,$5)
-      RETURNING
-        id,
-        title,
-        description,
-        remind_at AS "remindAt",
-        is_done AS "isDone",
-        client_id AS "clientId",
-        deal_id AS "dealId",
-        created_at AS "createdAt"
-      `,
-      [
-        title,
-        description ?? null,
-        remindAt,
-        clientId ?? null,
-        dealId ?? null,
-      ]
-    );
+  const result = await pool.query(
+    `
+    INSERT INTO reminders
+    (title, description, remind_at, client_id, deal_id, user_id)
+    VALUES ($1,$2,$3,$4,$5,$6)
+    RETURNING
+      id,
+      title,
+      description,
+      remind_at AS "remindAt",
+      is_done AS "isDone",
+      client_id AS "clientId",
+      deal_id AS "dealId",
+      created_at AS "createdAt"
+    `,
+    [
+      title,
+      description ?? null,
+      remindAt,
+      clientId ?? null,
+      dealId ?? null,
+      userId
+    ]
+  );
 
-    return result.rows[0];
-  },
+  return result.rows[0];
+}, 
 
   async updateStatus(id: number, isDone: boolean) {
     await pool.query(

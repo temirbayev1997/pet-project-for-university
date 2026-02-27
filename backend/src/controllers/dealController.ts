@@ -1,19 +1,24 @@
-import { Request, Response } from "express";
+import { Response, Request } from "express";
+import { AuthRequest } from "../middleware/authMiddleware";
 import { DealModel, DealStatus } from "../models/dealModel";
 
-export const getDeals = async (req: Request, res: Response) => {
-  const deals = await DealModel.getAll();
+export const getDeals = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+
+  const deals = await DealModel.getAllByUser(userId);
   res.json(deals);
 };
 
-export const createDeal = async (req: Request, res: Response) => {
+export const createDeal = async (req: AuthRequest, res: Response) => {
   const { title, amount, status, clientId, closeDate } = req.body;
 
-  if (!title || !status) {
+  if (!title || !status || !clientId) {
     return res
       .status(400)
       .json({ message: "title, status и clientId обязательны" });
   }
+
+  const userId = req.user?.id;
 
   const deal = await DealModel.create({
     title,
@@ -21,27 +26,37 @@ export const createDeal = async (req: Request, res: Response) => {
     status,
     clientId,
     closeDate,
-    createdBy: 1,
-    assignedTo: 1,
+    createdBy: userId,
+    assignedTo: userId,
   });
+
   res.status(201).json(deal);
 };
-export const updateDeal = async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
 
-  const updated = await DealModel.updateFull(id, req.body);
+export const updateDeal = async (req: AuthRequest, res: Response) => {
+  const id = Number(req.params.id);
+  const userId = req.user?.id;
+
+  const updated = await DealModel.updateFull(id, userId, req.body);
+
+  if (!updated) {
+    return res.status(404).json({ message: "Сделка не найдена" });
+  }
 
   res.json(updated);
 };
-export const updateDealStatus = async (req: Request, res: Response) => {
+
+export const updateDealStatus = async (req: AuthRequest, res: Response) => {
   const id = Number(req.params.id);
   const { status } = req.body as { status: DealStatus };
+  const userId = req.user?.id;
 
   if (!id || !status) {
     return res.status(400).json({ message: "id и status обязательны" });
   }
 
-  const updated = await DealModel.updateStatus(id, status);
+  const updated = await DealModel.updateStatus(id, userId, status);
+
   if (!updated) {
     return res.status(404).json({ message: "Сделка не найдена" });
   }

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/gory_zima_sneg_118389_1920x1080.jpg";
 
 export function RegisterPage() {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export function RegisterPage() {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       if (!res.ok) {
@@ -90,8 +90,8 @@ export function RegisterPage() {
           {/* Username input */}
           <div>
             <input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               type="text"
               placeholder="Ваше имя"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"

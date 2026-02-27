@@ -9,30 +9,34 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError(null);
+  setLoading(true);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Ошибка входа");
-      }
+    const data = await res.json();
 
-      navigate("/deals");
-    } catch (err: any) {
-      setError(err.message || "Что-то пошло не так");
-    } finally {
-      setLoading(false);
+    if (!res.ok) {
+      throw new Error(data.error || "Ошибка входа");
     }
-  };
+
+    // 🔥 СОХРАНЯЕМ ТОКЕН
+    localStorage.setItem("token", data.token);
+
+    navigate("/deals");
+  } catch (err: any) {
+    setError(err.message || "Что-то пошло не так");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div

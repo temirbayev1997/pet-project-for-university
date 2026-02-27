@@ -20,20 +20,25 @@ interface CreateDealInput {
 }
 
 export const DealModel = {
-  async getAll(): Promise<DealRow[]> {
-    const result = await pool.query(
-      `SELECT
-         id,
-         title,
-         amount,
-         status,
-         client_id AS "clientId",
-         close_date AS "closeDate"
-       FROM deals
-       ORDER BY id DESC`
-    );
-    return result.rows;
-  },
+async getAllByUser(userId: number): Promise<DealRow[]> {
+  const result = await pool.query(
+    `
+    SELECT
+      id,
+      title,
+      amount,
+      status,
+      client_id AS "clientId",
+      close_date AS "closeDate"
+    FROM deals
+    WHERE created_by = $1
+    ORDER BY id DESC
+    `,
+    [userId]
+  );
+
+  return result.rows;
+}, 
 
 async create(data: any) {
   const {
@@ -66,7 +71,7 @@ async create(data: any) {
 
   return result.rows[0];
 },
-async updateFull(id: number, data: any) {
+async updateFull(id: number, userId: number, data: any) {
   const {
     title,
     amount,
@@ -76,46 +81,48 @@ async updateFull(id: number, data: any) {
     assignedTo,
   } = data;
 
-  const result = await pool.query(
-    `
-    UPDATE deals
-    SET
-      title = $2,
-      amount = $3,
-      status = $4,
-      client_id = $5,
-      close_date = $6,
-      assigned_to = $7
-    WHERE id = $1
-    RETURNING
-      id,
-      title,
-      amount,
-      status,
-      client_id AS "clientId",
-      close_date AS "closeDate",
-      created_by AS "createdBy",
-      assigned_to AS "assignedTo"
-    `,
-    [id, title, amount, status, clientId, closeDate, assignedTo]
-  );
+const result = await pool.query(
+  `
+  UPDATE deals
+  SET
+    title = $3,
+    amount = $4,
+    status = $5,
+    client_id = $6,
+    close_date = $7,
+    assigned_to = $8
+  WHERE id = $1 AND created_by = $2
+  RETURNING
+    id,
+    title,
+    amount,
+    status,
+    client_id AS "clientId",
+    close_date AS "closeDate",
+    created_by AS "createdBy",
+    assigned_to AS "assignedTo"
+  `,
+  [id, userId, title, amount, status, clientId, closeDate, assignedTo]
+);
 
   return result.rows[0];
 },
-  async updateStatus(id: number, status: DealStatus): Promise<DealRow | null> {
-    const result = await pool.query(
-      `UPDATE deals
-       SET status = $2
-       WHERE id = $1
-       RETURNING
-         id,
-         title,
-         amount,
-         status,
-         client_id AS "clientId",
-         close_date AS "closeDate"`,
-      [id, status]
-    );
+  async updateStatus(id: number, userId: number, status: DealStatus): Promise<DealRow | null> {
+const result = await pool.query(
+  `
+  UPDATE deals
+  SET status = $3
+  WHERE id = $1 AND created_by = $2
+  RETURNING
+    id,
+    title,
+    amount,
+    status,
+    client_id AS "clientId",
+    close_date AS "closeDate"
+  `,
+  [id, userId, status]
+);
 
     return result.rows[0] ?? null;
   },
