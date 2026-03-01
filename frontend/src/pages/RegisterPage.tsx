@@ -6,6 +6,8 @@ export function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [bin, setBin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -19,7 +21,13 @@ export function RegisterPage() {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          password,
+          companyName,
+          bin
+        }),
       });
 
       if (!res.ok) {
@@ -110,7 +118,30 @@ export function RegisterPage() {
               required
             />
           </div>
+          {/* Company name */}
+          <div>
+            <input
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              type="text"
+              placeholder="Название компании"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required
+            />
+          </div>
 
+          {/* BIN */}
+          <div>
+            <input
+              value={bin}
+              onChange={(e) => setBin(e.target.value)}
+              type="text"
+              placeholder="БИН (12 цифр)"
+              maxLength={12}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required
+            />
+          </div>
           {/* Password input */}
           <div>
             <input

@@ -1,12 +1,14 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical } from "lucide-react";
+import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical, Building2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SidebarContext } from "../context/SidebarContext";
+import { useContext } from "react";
+import { CompanyContext } from "../context/CompanyContext";
 
 export function MainLayout( { isMobile }: { isMobile: boolean }) {
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
-
+  const { company } = useContext(CompanyContext);
   const [isMobileState, setIsMobileState] = useState(isMobile);
 
     useEffect(() => {
@@ -16,7 +18,6 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }, []);
-
     const handleLogout = () => {
       localStorage.removeItem("token"); // если есть авторизация
       navigate("/login"); // редирект
@@ -36,20 +37,30 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             {isOpen && (
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center text-white font-semibold text-lg shadow-sm">
-                  CRM
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold tracking-tight">
-                    Мини CRM
-                  </span>
-                  <span className="text-xs text-slate-500">
-                    для микробизнеса
-                  </span>
-                </div>
-              </div>
-            )}
+                <NavLink
+                    to="/profile"
+                    className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition"
+                  >
+                    <div className="h-9 w-9 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                      {company?.logo ? (
+                        <img
+                          src={`http://localhost:5000/uploads/${company.logo}?t=${Date.now()}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-sm font-semibold">CRM</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold tracking-tight">
+                        Мини CRM
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        для микробизнеса
+                      </span>
+                    </div>
+                  </NavLink>
+              )}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`
@@ -128,6 +139,20 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
               }>
                 <AlignStartVertical size={18} />
                 {isOpen && <span>Дашборд</span>}
+              </NavLink>
+              <NavLink 
+              to="/company"
+              className={({ isActive }) =>
+                `flex items-center ${
+                  isOpen ? "justify-start gap-3 px-3" : "justify-center px-0"
+                } py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-600 font-medium"
+                    : "text-slate-600 hover:bg-slate-50"
+                }`
+              }>
+                <Building2 size={18}/>
+                {isOpen && <span>Профиль компании</span>}
               </NavLink>
           </nav>
         </div>

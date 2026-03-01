@@ -5,13 +5,15 @@ import { ReminderModel } from "../models/reminderModel";
 export const ReminderController = {
 async getAll(req: AuthRequest, res: Response) {
   try {
+    console.log("REQ.USER:", req.user);
+
     const userId = req.user?.id;
 
     const reminders = await ReminderModel.getAll(userId);
     res.json(reminders);
 
   } catch (error) {
-    console.error(error);
+    console.error("ERROR IN GETALL:", error);
     res.status(500).json({ message: "Failed to fetch reminders" });
   }
 },

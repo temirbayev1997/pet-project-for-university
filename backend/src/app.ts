@@ -7,8 +7,10 @@ import dealRoutes from "./routes/dealRoutes";
 import authRoutes from "./routes/authRoutes";
 import reminderRoutes from "./routes/reminderRoutes";
 import statsRoutes from "./routes/statsRoutes";
-
+import companyRoutes from "./routes/companyRoutes";
+import userRoutes from "./routes/userRoutes";
 import { initDatabase } from "./db/initDb";
+import path from "path"; 
 
 dotenv.config();
 
@@ -20,11 +22,14 @@ initDatabase().catch(console.error);
 app.use(cors());
 app.use(express.json());
 
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/deals", dealRoutes);
 app.use("/api/reminders", reminderRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/company", companyRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend успешно запущен 🚀" });

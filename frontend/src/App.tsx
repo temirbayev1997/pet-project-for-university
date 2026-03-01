@@ -10,6 +10,9 @@ import { RemindersPage } from "./pages/RemindersPage";
 import { MainLayout } from "./layouts/MainLayout";
 import { LandingPage } from "./pages/LandingPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { CompanyProfile } from "./pages/CompanyProfile";
+import { ProfilePage } from "./pages/ProfilePage";
+import { CompanyProvider } from "./context/CompanyContext";
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -31,11 +34,13 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route element={<MainLayout isMobile={isMobile} />}>
+        <Route element={< CompanyProvider><MainLayout isMobile={isMobile} /></CompanyProvider>}>
           <Route path="/clients" element={<ClientsPage />} />
           <Route path="/deals" element={<DealsPage />} />
           <Route path="/reminders" element={<RemindersPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/company" element={<CompanyProfile />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </Router>
