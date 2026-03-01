@@ -13,6 +13,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { CompanyProfile } from "./pages/CompanyProfile";
 import { ProfilePage } from "./pages/ProfilePage";
 import { CompanyProvider } from "./context/CompanyContext";
+import MessagesPage from "./pages/MessagesPage";
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/company" element={<CompanyProfile />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/messages" element={<MessagesPage />} />
         </Route>
       </Routes>
     </Router>

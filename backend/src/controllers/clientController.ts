@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ClientModel } from "../models/clientModel";
+import { pool } from "../db";
 
 export const getClients = async (req: Request, res: Response) => {
   const clients = await ClientModel.getAll();
@@ -31,4 +32,15 @@ export const updateClient = async (req: Request, res: Response) => {
   }
 
   res.json(updated);
+};
+export const getClientsWithTelegram = async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, name FROM clients WHERE telegram_chat_id IS NOT NULL"
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch clients" });
+  }
 };

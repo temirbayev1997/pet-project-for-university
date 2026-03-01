@@ -34,7 +34,8 @@ CREATE TABLE clients (
   is_archived BOOLEAN DEFAULT false,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  telegram_chat_id BIGINT UNIQUE
 );
 
 -- DEALS
@@ -67,6 +68,14 @@ CREATE TABLE reminders (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
+  chat_id BIGINT NOT NULL,
+  text TEXT NOT NULL,
+  from_client BOOLEAN NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- ADMIN USER
 INSERT INTO users (name, email, password, role)
 VALUES (

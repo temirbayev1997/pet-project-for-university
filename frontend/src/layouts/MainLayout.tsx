@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical, Building2 } from "lucide-react";
+import { Users, Briefcase, Bell, LogOut, ChevronLeft, ChevronRight, AlignStartVertical, Building2, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SidebarContext } from "../context/SidebarContext";
 import { useContext } from "react";
@@ -93,7 +93,22 @@ export function MainLayout( { isMobile }: { isMobile: boolean }) {
               <Users size={18} />
               {isOpen && <span>Клиенты</span>}
             </NavLink>
-
+            
+            <NavLink
+              to="/messages"
+              className={({ isActive }) =>
+                `flex items-center ${
+                  isOpen ? "justify-start gap-3 px-3" : "justify-center px-0"
+                } py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-600 font-medium"
+                    : "text-slate-600 hover:bg-slate-50"
+                }`
+              }
+            >
+              <MessageCircle size={18} />
+              {isOpen && <span>Сообщения</span>}
+            </NavLink>
             <NavLink
               to="/deals"
               className={({ isActive }) =>

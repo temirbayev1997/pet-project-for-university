@@ -1,3 +1,4 @@
+import "./telegram/bot";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -9,6 +10,7 @@ import reminderRoutes from "./routes/reminderRoutes";
 import statsRoutes from "./routes/statsRoutes";
 import companyRoutes from "./routes/companyRoutes";
 import userRoutes from "./routes/userRoutes";
+import messageRoutes from "./routes/messageRoutes";
 import { initDatabase } from "./db/initDb";
 import path from "path"; 
 
@@ -30,6 +32,7 @@ app.use("/api/reminders", reminderRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend успешно запущен 🚀" });
