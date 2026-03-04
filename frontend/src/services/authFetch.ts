@@ -4,24 +4,31 @@ export async function authFetch(
   endpoint: string,
   options: RequestInit = {}
 ) {
-  const token = localStorage.getItem("token");
+  const token =
+  localStorage.getItem("access") ||
+  localStorage.getItem("token");
 
   const isFormData = options.body instanceof FormData;
 
+  const headers: any = {
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    ...(options.headers || {}),
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
-    headers: {
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      Authorization: token ? `Bearer ${token}` : "",
-      ...(options.headers || {}),
-    },
+    headers,
   });
 
-  if (res.status === 401) {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-    return;
-  }
+  // if (res.status === 401) {
+  //   localStorage.removeItem("token");
+  //   window.location.href = "/login";
+  //   return;
+  // }
 
   return res;
 }

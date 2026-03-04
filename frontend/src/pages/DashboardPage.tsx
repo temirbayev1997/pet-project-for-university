@@ -5,23 +5,42 @@ import { Column, Pie } from "@ant-design/plots";
 export function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
 
+  const statuses = [
+    "Lead",
+    "Contacted",
+    "Proposal",
+    "InProgress",
+    "Won",
+    "Lost",
+  ];
+
   useEffect(() => {
     fetchStats().then(setStats);
   }, []);
 
   if (!stats) return <div className="p-6">Загрузка...</div>;
 
+  const pieData = statuses.map((status) => {
+    const found = stats.dealsByStatus.find((d: any) => d.status === status);
+
+    return {
+      status,
+      count: found ? Number(found.count) : 0,
+    };
+  });
+
   const columnConfig = {
-    data: stats.dealsByStatus,
+    data: stats.dealsByStatus || [],
     xField: "status",
     yField: "count",
     label: { position: "middle" },
   };
 
   const pieConfig = {
-    data: stats.dealsByStatus,
+    data: pieData,
     angleField: "count",
     colorField: "status",
+    radius: 0.9,
   };
 
   return (

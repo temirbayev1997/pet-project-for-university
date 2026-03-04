@@ -44,7 +44,12 @@ CREATE TABLE deals (
   title VARCHAR(255) NOT NULL,
   amount DECIMAL(10,2),
   status VARCHAR(50) NOT NULL CHECK (status IN (
-    'Lead','Contacted','Proposal','InProgress','Won','Lost'
+    'Lead',
+    'Contacted',
+    'Proposal',
+    'InProgress',
+    'Won',
+    'Lost'
   )),
   client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,

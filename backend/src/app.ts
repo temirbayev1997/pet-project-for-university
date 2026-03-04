@@ -1,4 +1,4 @@
-import "./telegram/bot";
+// import "./telegram/bot";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -32,7 +32,7 @@ app.use("/api/reminders", reminderRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/messages", messageRoutes);
+// app.use("/api/messages", messageRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend успешно запущен 🚀" });

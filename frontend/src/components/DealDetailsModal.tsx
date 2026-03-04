@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Deal } from "../types/deal";
-import { createReminder } from "../services/api";
+import { updateDeal, createReminder } from "../services/api";
 
 export function DealDetailsModal({
   deal,
@@ -18,11 +18,7 @@ export function DealDetailsModal({
   });
 
   const handleSave = async () => {
-    await fetch(`http://localhost:5000/api/deals/${deal.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    await updateDeal(deal.id, form);
 
     onUpdated();
     onClose();

@@ -89,3 +89,12 @@ export async function fetchStats() {
   const res = await authFetch("/stats");
   return res?.json();
 }
+
+export async function updateDeal(id: number, data: any) {
+  const res = await authFetch(`/deals/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+  return res?.json();
+}
