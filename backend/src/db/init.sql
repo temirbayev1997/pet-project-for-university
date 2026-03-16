@@ -19,9 +19,15 @@ CREATE TABLE companies (
   bin VARCHAR(12) UNIQUE
 );
 
+-- связь users -> companies
 ALTER TABLE users
 ADD CONSTRAINT fk_company
 FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE;
+
+-- связь companies -> owner
+ALTER TABLE companies
+ADD CONSTRAINT fk_company_owner
+FOREIGN KEY (owner_id) REFERENCES users(id);
 
 -- CLIENTS
 CREATE TABLE clients (
@@ -53,8 +59,8 @@ CREATE TABLE deals (
   )),
   client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  created_by INTEGER,
-  assigned_to INTEGER,
+  created_by INTEGER REFERENCES users(id),
+  assigned_to INTEGER REFERENCES users(id),
   close_date DATE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -73,6 +79,7 @@ CREATE TABLE reminders (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- MESSAGES
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,
   client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
@@ -81,6 +88,7 @@ CREATE TABLE messages (
   from_client BOOLEAN NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 -- ADMIN USER
 INSERT INTO users (name, email, password, role)
 VALUES (
